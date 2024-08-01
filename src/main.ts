@@ -1,24 +1,20 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import { PageController } from "./controller/page.controller"
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const loginForm = document.querySelector("#loginForm") as HTMLFormElement
+const loginEmail = document.querySelector("#emailIUser") as HTMLInputElement
+const loginPassword = document.querySelector("#passwordIUser") as HTMLInputElement
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+const url = "https://reqres.in/api/"
+
+loginForm.addEventListener("submit", async (event: Event) => {
+  event.preventDefault()
+
+  const user = {
+    email: loginEmail.value,
+    password: loginPassword.value
+  }
+  const pageController = new PageController(url)
+  const responseOfLogin = await pageController.login(user, "login")
+
+  sessionStorage.setItem("token", responseOfLogin.token)
+})
